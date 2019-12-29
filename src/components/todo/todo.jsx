@@ -4,6 +4,9 @@ const todo = ({ todo, onDeleteTodo }) => {
 
   function getTodoClass() {
     if (priority === 1) return "list-group-item-danger";
+    if (priority === 2) return "list-group-item-warning";
+    if (priority === 3) return "list-group-item-light";
+    if (priority === 4) return "list-group-item-secondary";
   }
 
   return (

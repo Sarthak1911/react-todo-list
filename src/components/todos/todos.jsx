@@ -6,7 +6,13 @@ const todos = ({ todos, currentPage, pageSize, onDeleteTodo }) => {
   function displayTodos() {
     if (todos.length === 0) return "No todos to display";
 
-    let paginatedTodos = paginate(todos, currentPage, pageSize);
+    let sortedTodos = todos.sort((todoOne, todoTwo) => {
+      if (todoOne.priority < todoTwo.priority) return -1;
+      if (todoOne.priority > todoTwo.priority) return 1;
+      return 0;
+    });
+
+    let paginatedTodos = paginate(sortedTodos, currentPage, pageSize);
 
     return paginatedTodos.map(todo => (
       <Todo todo={todo} key={todo.id} onDeleteTodo={onDeleteTodo} />
