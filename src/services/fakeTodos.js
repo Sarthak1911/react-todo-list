@@ -30,5 +30,37 @@ export const todos = [
     priority: 2,
     isDone: false,
     title: "Finish the game"
+  },
+  {
+    id: "5",
+    createdBy: "Adam Appple",
+    createdOn: "2018-10-12",
+    priority: 2,
+    isDone: false,
+    title: "Finish the game"
+  },
+  {
+    id: "6",
+    createdBy: "Adam Appple",
+    createdOn: "2018-10-12",
+    priority: 2,
+    isDone: false,
+    title: "Finish the game"
+  },
+  {
+    id: "7",
+    createdBy: "Adam Appple",
+    createdOn: "2018-10-12",
+    priority: 2,
+    isDone: false,
+    title: "Finish the game"
+  },
+  {
+    id: "8",
+    createdBy: "Adam Appple",
+    createdOn: "2018-10-12",
+    priority: 2,
+    isDone: false,
+    title: "Finish the gam"
   }
 ];

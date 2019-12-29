@@ -1,27 +1,24 @@
 import React from "react";
 const todo = ({ todo, onDeleteTodo }) => {
-  const { id, title, createdBy, priority } = todo;
+  const { id, title, priority } = todo;
 
-  //User defined functions
   function getTodoClass() {
-    if (priority === 1) return "table-danger";
-    if (priority === 2) return "table-warning";
-    if (priority === 3) return "table-info";
-    if (priority === 4) return "table-primary";
+    if (priority === 1) return "list-group-item-danger";
   }
 
   return (
-    <tr className={getTodoClass()}>
-      <td>
-        <span className="font-weight-bold"> {title} </span>
-      </td>
-      <td>{createdBy}</td>
-      <td>
+    <li
+      className={
+        "shadow border rounded m-2 card list-group-item " + getTodoClass()
+      }
+    >
+      <div className="card-body d-flex justify-content-between align-items-center">
+        <h2> {title} </h2>
         <button className="btn btn-danger" onClick={() => onDeleteTodo(id)}>
           Delete
         </button>
-      </td>
-    </tr>
+      </div>
+    </li>
   );
 };
 

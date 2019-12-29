@@ -1,9 +1,12 @@
 import React, { Component } from "react";
-import TodoTable from "./components/todoTable/todoTable";
+import Todos from "./components/todos/todos";
+import Pagination from "./components/pagination/pagination";
 import { todos } from "./services/fakeTodos";
 class App extends Component {
   state = {
-    todos: []
+    todos: [],
+    pageSize: 7,
+    currentPage: 1
   };
 
   componentDidMount() {
@@ -11,23 +14,43 @@ class App extends Component {
   }
 
   render() {
-    const { todos } = this.state;
+    const { todos, pageSize, currentPage } = this.state;
 
     return (
-      <main className="container">
-        <p>Showing {todos.length} number of todos for users</p>
-        <TodoTable todos={todos} onDeleteTodo={this.handleDeleteTodo} />
-      </main>
+      <React.Fragment>
+        <main className="container p-2">
+          <Todos
+            todos={todos}
+            pageSize={pageSize}
+            currentPage={currentPage}
+            onDeleteTodo={this.handleDeleteTodo}
+          />
+        </main>
+        <Pagination
+          itemsCount={todos.length}
+          pageSize={pageSize}
+          currentPage={currentPage}
+          onPageSelect={this.handlePageSelect}
+        />
+      </React.Fragment>
     );
   }
 
   //Handle events
   handleDeleteTodo = id => {
-    const { todos } = this.state;
+    const { todos, pageSize } = this.state;
+
+    let { currentPage } = this.state;
 
     let newTodos = todos.filter(todo => todo.id !== id);
 
-    this.setState({ todos: newTodos });
+    if (newTodos.length % pageSize === 0) --currentPage;
+
+    this.setState({ todos: newTodos, currentPage });
+  };
+
+  handlePageSelect = page => {
+    this.setState({ currentPage: page });
   };
 }
 
