@@ -30,7 +30,12 @@ class App extends Component {
     return (
       <React.Fragment>
         <div className="floating position-fixed m-4">
-          <Filters filters={filters} onSelectFilter={this.handleSelectFilter} />
+          <Filters
+            filters={filters}
+            selectedFiltersLength={selectedFilters.length}
+            onSelectFilter={this.handleSelectFilter}
+            onClearAll={this.handleClearAll}
+          />
         </div>
         <main className="container p-2">
           <Todos
@@ -109,6 +114,19 @@ class App extends Component {
     }
 
     this.setState({ selectedFilters, currentPage: 1 });
+  };
+
+  handleClearAll = e => {
+    //Reset the selectedFilters
+    //Set currentPage to 1
+    const filters = e.target.parentElement.childNodes;
+
+    for (let filter of filters) {
+      if (filter.classList.contains("active"))
+        filter.classList.remove("active");
+    }
+
+    this.setState({ selectedFilters: [], currentPage: 1 });
   };
 }
 

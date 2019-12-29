@@ -1,6 +1,11 @@
 import React from "react";
 import Filter from "../filter/filter";
-const filters = ({ filters, onSelectFilter }) => {
+const filters = ({
+  filters,
+  onSelectFilter,
+  onClearAll,
+  selectedFiltersLength
+}) => {
   return (
     //Make filters collapsiable
     <div>
@@ -14,6 +19,15 @@ const filters = ({ filters, onSelectFilter }) => {
             onSelectFilter={onSelectFilter}
           />
         ))}
+        <button
+          className={
+            "list-group-item list-group-item-action m-1 rounded border bg-success text-light " +
+            (selectedFiltersLength ? "" : "d-none")
+          }
+          onClick={e => onClearAll(e)}
+        >
+          Clear All
+        </button>
       </div>
     </div>
   );
