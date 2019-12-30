@@ -1,0 +1,12 @@
+.line-through {
+  text-decoration: line-through;
+}
+
+.a-link {
+  padding: 0;
+  margin: 0;
+}
+
+.a-link:hover {
+  text-decoration: none;
+}

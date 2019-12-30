@@ -2,9 +2,17 @@ import React from "react";
 import Todo from "../todo/todo";
 import paginate from "../../utils/paginate";
 
-const todos = ({ todos, currentPage, pageSize, onDeleteTodo }) => {
+const todos = ({ todos, currentPage, pageSize, onDeleteTodo, onDoneTodo }) => {
   function displayTodos() {
-    if (todos.length === 0) return "No todos to display";
+    if (todos.length === 0)
+      return (
+        <h2
+          className="d-flex justify-content-center align-items-center"
+          style={{ height: "98vh" }}
+        >
+          No todos, Enjoy ;)
+        </h2>
+      );
 
     let sortedTodos = todos.sort((todoOne, todoTwo) => {
       if (todoOne.priority < todoTwo.priority) return -1;
@@ -15,7 +23,12 @@ const todos = ({ todos, currentPage, pageSize, onDeleteTodo }) => {
     let paginatedTodos = paginate(sortedTodos, currentPage, pageSize);
 
     return paginatedTodos.map(todo => (
-      <Todo todo={todo} key={todo.id} onDeleteTodo={onDeleteTodo} />
+      <Todo
+        todo={todo}
+        key={todo.id}
+        onDeleteTodo={onDeleteTodo}
+        onDoneTodo={onDoneTodo}
+      />
     ));
   }
 
