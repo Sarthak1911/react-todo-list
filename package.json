@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^7.2.1",
     "bootstrap": "^4.4.1",
     "font-awesome": "^4.7.0",
+    "joi-browser": "^13.4.0",
     "lodash": "^4.17.15",
     "materialize-css": "^1.0.0-rc.2",
     "prop-types": "^15.7.2",

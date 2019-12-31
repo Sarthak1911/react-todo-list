@@ -11,12 +11,12 @@ const todo = ({ todo, onDeleteTodo, onDoneTodo }) => {
     if (priority === 4) return "list-group-item-secondary";
   }
 
-  function getTodoTextClass() {
-    if (priority === 1) return "danger";
-    if (priority === 2) return "warning";
-    if (priority === 3) return "light";
-    if (priority === 4) return "secondary";
-  }
+  //   function getTodoTextClass() {
+  //     if (priority === 1) return "danger";
+  //     if (priority === 2) return "warning";
+  //     if (priority === 3) return "light";
+  //     if (priority === 4) return "secondary";
+  //   }
 
   return (
     <li

@@ -6,7 +6,7 @@ import Register from "./components/register/register";
 import Done from "./components/done/done";
 import TodoDetails from "./components/todoDetails/todoDetails";
 import NotFound from "./components/notFound/notFound";
-import NewTodo from "./components/newTodo/newTodo";
+import CreateTodoForm from "./components/CreateTodoForm/createTodoForm";
 import "./App.css";
 
 class App extends Component {
@@ -22,7 +22,7 @@ class App extends Component {
           <Route path="/done" exact component={Done} />
           <Route path="/todos/:id" exact component={TodoDetails} />
           <Route path="/not-found" exact component={NotFound} />
-          <Route path="/new-todo" exact component={NewTodo} />
+          <Route path="/new-todo" exact component={CreateTodoForm} />
           <Route path="/" exact component={Home} />
           <Redirect to={"/not-found"} />
         </Switch>
