@@ -1,16 +1,11 @@
-import React from "react";
-import BackButton from "../backButton/backbutton";
-import TextInput from "../textInput/textInput";
-import NumberInput from "../numberInput/numberInput";
-import Form from "../Form/Form";
+import React, { Component } from "react";
 import Joi from "joi-browser";
-import "./createTodoForm.css";
+import Form from "../Form/form";
 class CreateTodoForm extends Form {
   state = {
     data: {
       title: "",
-      priority: 1
-      //Need to add other fields as well
+      priority: "1"
     },
     errors: {}
   };
@@ -19,56 +14,26 @@ class CreateTodoForm extends Form {
     title: Joi.string()
       .required()
       .label("Title"),
-    priority: Joi.number()
+    priority: Joi.string()
       .required()
-      .min(1)
-      .max(4)
       .label("Priority")
+  };
+
+  doSubmit = () => {
+    //Call server after task is created
+    console.log("Submitted");
   };
 
   render() {
     const { data, errors } = this.state;
 
     return (
-      <React.Fragment>
-        <BackButton onBackButtonPressed={this.handleBackButtonPressed} />
-        <div className="d-flex justify-content-center align-items-center form-container">
-          <div className="card shadow p-4 col-8">
-            <h2>Create a new task</h2>
-            <hr />
-            <form onSubmit={this.handleSubmit}>
-              <TextInput
-                title="title"
-                data={data}
-                onChange={this.handleChange}
-                error={errors.title}
-              />
-              <NumberInput
-                title="priority"
-                data={data}
-                onChange={this.handleChange}
-                error={errors.priority}
-              />
-              <button
-                type="submit"
-                className="btn btn-primary"
-                disabled={this.validate()}
-              >
-                Submit
-              </button>
-            </form>
-          </div>
-        </div>
-      </React.Fragment>
+      <form onSubmit={this.handleSubmit}>
+        {this.renderInput("title", "text")}
+        {this.renderInput("priority", "number")}
+        {this.renderSubmitButton("Submit")}
+      </form>
     );
-  }
-
-  handleBackButtonPressed = () => {
-    this.props.history.push("/");
-  };
-
-  doSubmit() {
-    console.log("Submitted");
   }
 }
 
