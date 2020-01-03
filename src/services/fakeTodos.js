@@ -1,34 +1,111 @@
-export const todos = [
+export let todos = [
   {
     id: "1",
     createdBy: "Jon Doe",
-    createdOn: "2018-12-12",
-    priority: 1,
+    createdOn: "2019-01-09",
     isDone: false,
-    title: "Finish the laundry"
+    title: "XYZ",
+    priority: 1
   },
   {
     id: "2",
-    createdBy: "Jane Doe",
-    createdOn: "2018-12-13",
-    priority: 2,
-    isDone: true,
-    title: "Finish the homework"
+    createdBy: "Jon Doe",
+    createdOn: "2019-01-09",
+    isDone: false,
+    title: "XYZ",
+    priority: 1
   },
   {
     id: "3",
-    createdBy: "Jonny Deep",
-    createdOn: "2018-11-12",
-    priority: 3,
+    createdBy: "Jon Doe",
+    createdOn: "2019-01-09",
     isDone: false,
-    title: "Finish the food"
+    title: "XYZ",
+    priority: 1
   },
   {
     id: "4",
-    createdBy: "Adam Appple",
-    createdOn: "2018-10-12",
-    priority: 4,
+    createdBy: "Jon Doe",
+    createdOn: "2019-01-09",
     isDone: false,
-    title: "Finish the game"
+    title: "XYZ",
+    priority: 1
+  },
+  {
+    id: "5",
+    createdBy: "Jon Doe",
+    createdOn: "2019-01-09",
+    isDone: false,
+    title: "XYZ",
+    priority: 1
+  },
+  {
+    id: "6",
+    createdBy: "Jon Doe",
+    createdOn: "2019-01-09",
+    isDone: false,
+    title: "XYZ",
+    priority: 1
+  },
+  {
+    id: "7",
+    createdBy: "Jon Doe",
+    createdOn: "2019-01-09",
+    isDone: false,
+    title: "XYZ",
+    priority: 2
+  },
+  {
+    id: "8",
+    createdBy: "Jon Doe",
+    createdOn: "2019-01-09",
+    isDone: false,
+    title: "XYZ",
+    priority: 3
   }
 ];
+
+export function getAllTasks() {
+  //Use createdBy to filter the tasks
+  return todos;
+}
+
+export function getTask(id) {
+  //Use createdBy to filter the tasks
+  return todos.find(todo => todo.id === id);
+}
+
+export function deleteTask(id) {
+  //Use createdBy to filter the tasks
+  todos = todos.filter(todo => todo.id !== id);
+  return getAllTasks();
+}
+
+export function updateTask(task) {
+  //Find the index of the task
+  const index = todos.findIndex(todo => todo.id === task.id);
+  //Update the task
+  if (index >= 0) todos[index] = task;
+}
+
+export function createTask(task) {
+  //Generate id
+  const id = Math.ceil(Math.random() * 10) + "_id";
+
+  //Check if already present
+  const isPresent = getTask(id);
+
+  if (isPresent) {
+    console.log("Already present");
+    return;
+  }
+
+  //Generate current date
+  const createdOn = new Date();
+
+  //Update task with id and date
+  task = { ...task, id, createdOn };
+
+  //Add to list
+  todos.push(task);
+}

@@ -4,7 +4,7 @@ import Pagination from "../pagination/pagination";
 import Filters from "../filters/filters";
 import Sidebar from "../sidebar/sidebar";
 import AddButton from "../addButton/addButton";
-import { todos } from "../../services/fakeTodos";
+import { getAllTasks, deleteTask } from "../../services/fakeTodos";
 import { filters } from "../../services/fakeFilter";
 
 import "./home.css";
@@ -22,7 +22,7 @@ class Home extends Component {
     //Get rid of the magic number
     let pageSize = Math.floor(window.screen.height / 150);
 
-    this.setState({ todos, filters, pageSize });
+    this.setState({ todos: getAllTasks(), filters, pageSize });
   }
 
   render() {
@@ -83,15 +83,19 @@ class Home extends Component {
 
   //Handle events
   handleDeleteTodo = id => {
-    const { todos, pageSize } = this.state;
+    const { pageSize } = this.state;
 
     let { currentPage } = this.state;
 
-    let newTodos = todos.filter(todo => todo.id !== id);
+    deleteTask(id);
 
-    if (newTodos.length % pageSize === 0) --currentPage;
+    //Refresh the list
+    const todos = getAllTasks();
 
-    this.setState({ todos: newTodos, currentPage });
+    //Change page to previous if the one task on the page was deleted
+    if (todos.length % pageSize === 0) --currentPage;
+
+    this.setState({ todos: todos, currentPage });
   };
 
   handlePageSelect = page => {

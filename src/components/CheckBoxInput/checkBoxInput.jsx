@@ -8,6 +8,7 @@ const CheckBoxInput = ({ label, name, value, ...rest }) => {
         className="text-capitalize m-1"
         id={name}
         checked={value}
+        type="checkbox"
       ></input>
       <label htmlFor={name} className="text-capitalize">
         {label || name}

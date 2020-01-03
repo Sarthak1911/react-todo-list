@@ -71,18 +71,6 @@ class Form extends Component {
   renderInput = (name, type, label?) => {
     const { data, errors } = this.state;
 
-    if (type === "checkbox") {
-      return (
-        <CheckBoxInput
-          name={name}
-          value={data[name]}
-          onChange={this.handleChange}
-          type={type}
-          label={label}
-        />
-      );
-    }
-
     return (
       <Input
         label={label}
@@ -91,6 +79,19 @@ class Form extends Component {
         value={data[name]}
         onChange={this.handleChange}
         error={errors[name]}
+      />
+    );
+  };
+
+  renderCheckBox = (name, label?) => {
+    const { data } = this.state;
+
+    return (
+      <CheckBoxInput
+        name={name}
+        value={data[name]}
+        onChange={this.handleChange}
+        label={label}
       />
     );
   };

@@ -1,8 +1,13 @@
 import React from "react";
 import Joi from "joi-browser";
 import Form from "../Form/form";
-import { todos } from "../../services/fakeTodos";
-class CreateTodoForm extends Form {
+import {
+  getTask,
+  getAllTasks,
+  updateTask,
+  createTask
+} from "../../services/fakeTodos";
+class TodoDetails extends Form {
   state = {
     data: {},
     errors: {}
@@ -10,15 +15,25 @@ class CreateTodoForm extends Form {
 
   constructor(props) {
     super(props);
-
     this.state.data = {
       id: "",
-      createdBy: "Jon Doe",
+      createdBy: "",
       createdOn: "",
-      priority: 1,
-      isDone: false,
+      priority: "",
+      isDone: "",
       title: ""
     };
+  }
+
+  componentDidMount() {
+    const { match, history } = this.props;
+
+    if (match.params.id === "new") return;
+
+    const data = getTask(match.params.id);
+
+    if (data) this.setState({ data });
+    else history.replace("/not-found");
   }
 
   schema = {
@@ -29,50 +44,34 @@ class CreateTodoForm extends Form {
       .required()
       .min(1)
       .max(4)
-      .label("Priority")
+      .label("Priority"),
+    isDone: Joi.optional()
   };
 
   doSubmit = () => {
-    //Call server after task is created
-    const { history } = this.props;
     //Get task
-    let { data: task } = { ...this.state };
+    const task = { ...this.state.data };
+    //Update task
+    if (task.id !== "") updateTask(task);
+    //Create new task
+    else createTask(task);
 
-    //Generate id
-    const id = Math.ceil(Math.random() * 10) + "_id";
-
-    //Check if already present
-    const isPresent = todos.find(todo => todo.id === id);
-
-    if (isPresent) {
-      console.log("Already present");
-      history.push("/");
-      return;
-    }
-
-    //Generate current date
-    const createdOn = new Date();
-
-    //Update task with id and date
-    task = { ...task, id, createdOn };
-
-    //Add to list
-    todos.push(task);
-
-    //Redirect to home
-    history.push("/");
+    this.props.history.push("/");
   };
 
   render() {
+    const { id } = this.state.data;
+
     return (
       <div className="form-container">
         <div className="col-8 card shadow p-4">
-          <h2>Create a task</h2>
+          <h2>Edit task</h2>
           <hr />
           <form>
             {this.renderBackButton("/")}
             {this.renderInput("title", "text")}
             {this.renderInput("priority", "number")}
+            {id ? this.renderCheckBox("isDone") : null}
             {this.renderSubmitButton("Submit")}
           </form>
         </div>
@@ -81,4 +80,4 @@ class CreateTodoForm extends Form {
   }
 }
 
-export default CreateTodoForm;
+export default TodoDetails;
