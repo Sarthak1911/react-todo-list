@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import Joi from "joi-browser";
 import Input from "../Input/input";
+import BackButton from "../backButton/backbutton";
+import CheckBoxInput from "./../CheckBoxInput/checkBoxInput";
 
 class Form extends Component {
   state = {
@@ -12,7 +14,10 @@ class Form extends Component {
     const { data } = this.state;
     const errors = {};
 
-    const { error } = Joi.validate(data, this.schema, { abortEarly: false });
+    const { error } = Joi.validate(data, this.schema, {
+      abortEarly: false,
+      allowUnknown: true
+    });
 
     if (!error) return null;
 
@@ -50,17 +55,37 @@ class Form extends Component {
     else delete errors[input.name];
 
     const data = { ...this.state.data };
-    const value = input.value;
+    let value = "";
+    //Check for the type of input
+    if (input.type === "checkbox") value = input.checked;
+    else value = input.value;
     const property = input.name;
     data[property] = value;
     this.setState({ data, errors });
   };
 
-  renderInput = (name, type) => {
+  handleBackButtonPressed = path => {
+    this.props.history.push(path);
+  };
+
+  renderInput = (name, type, label?) => {
     const { data, errors } = this.state;
+
+    if (type === "checkbox") {
+      return (
+        <CheckBoxInput
+          name={name}
+          value={data[name]}
+          onChange={this.handleChange}
+          type={type}
+          label={label}
+        />
+      );
+    }
 
     return (
       <Input
+        label={label}
         name={name}
         type={type}
         value={data[name]}
@@ -73,14 +98,22 @@ class Form extends Component {
   renderSubmitButton = label => {
     return (
       <button
-        type="submit"
+        type="button"
         className="btn btn-primary"
         disabled={this.validate()}
+        onClick={this.handleSubmit}
       >
         {label}
       </button>
     );
   };
+
+  renderBackButton = path => (
+    <BackButton
+      onBackButtonPressed={this.handleBackButtonPressed}
+      path={path}
+    />
+  );
 }
 
 export default Form;

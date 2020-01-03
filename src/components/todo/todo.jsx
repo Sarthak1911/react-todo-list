@@ -2,9 +2,12 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "./todo.css";
 const todo = ({ todo, onDeleteTodo, onDoneTodo }) => {
-  const { id, title, priority, isDone } = todo;
+  const { id, title, isDone } = todo;
+  let { priority } = todo;
 
   function getTodoClass() {
+    priority = parseInt(priority);
+
     if (priority === 1) return "list-group-item-danger";
     if (priority === 2) return "list-group-item-warning";
     if (priority === 3) return "list-group-item-light";

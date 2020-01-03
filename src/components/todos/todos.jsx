@@ -14,9 +14,11 @@ const todos = ({ todos, currentPage, pageSize, onDeleteTodo, onDoneTodo }) => {
         </h2>
       );
 
-    let sortedTodos = todos.sort((todoOne, todoTwo) => {
-      if (todoOne.priority < todoTwo.priority) return -1;
-      if (todoOne.priority > todoTwo.priority) return 1;
+    let sortedTodos = todos.sort(({ priority: p1 }, { priority: p2 }) => {
+      p1 = parseInt(p1);
+      p2 = parseInt(p2);
+      if (p1 < p2) return -1;
+      if (p1 > p2) return 1;
       return 0;
     });
 

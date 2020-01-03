@@ -1,9 +1,9 @@
 import React from "react";
-const Input = ({ name, error, ...rest }) => {
+const Input = ({ label, name, error, ...rest }) => {
   return (
     <div className="form-group">
       <label htmlFor={name} className="text-capitalize">
-        {name}
+        {label || name}
       </label>
       <input
         name={name}
