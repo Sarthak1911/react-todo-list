@@ -5,7 +5,7 @@ export let todos = [
     createdOn: "2019-01-09",
     isDone: false,
     title: "XYZ",
-    priority: 1
+    priority: "1"
   },
   {
     id: "2",
@@ -13,7 +13,7 @@ export let todos = [
     createdOn: "2019-01-09",
     isDone: false,
     title: "XYZ",
-    priority: 1
+    priority: "2"
   },
   {
     id: "3",
@@ -21,7 +21,7 @@ export let todos = [
     createdOn: "2019-01-09",
     isDone: false,
     title: "XYZ",
-    priority: 1
+    priority: "3"
   },
   {
     id: "4",
@@ -29,7 +29,7 @@ export let todos = [
     createdOn: "2019-01-09",
     isDone: false,
     title: "XYZ",
-    priority: 1
+    priority: "4"
   },
   {
     id: "5",
@@ -37,37 +37,19 @@ export let todos = [
     createdOn: "2019-01-09",
     isDone: false,
     title: "XYZ",
-    priority: 1
-  },
-  {
-    id: "6",
-    createdBy: "Jon Doe",
-    createdOn: "2019-01-09",
-    isDone: false,
-    title: "XYZ",
-    priority: 1
-  },
-  {
-    id: "7",
-    createdBy: "Jon Doe",
-    createdOn: "2019-01-09",
-    isDone: false,
-    title: "XYZ",
-    priority: 2
-  },
-  {
-    id: "8",
-    createdBy: "Jon Doe",
-    createdOn: "2019-01-09",
-    isDone: false,
-    title: "XYZ",
-    priority: 3
+    priority: "4"
   }
 ];
 
-export function getAllTasks() {
+export function getAllTasks(query) {
   //Use createdBy to filter the tasks
-  return todos;
+  return query
+    ? todos.filter(
+        todo =>
+          todo.title.toLowerCase().includes(query.toLowerCase()) ||
+          parseInt(todo.priority) === parseInt(query)
+      )
+    : todos;
 }
 
 export function getTask(id) {

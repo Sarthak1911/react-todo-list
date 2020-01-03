@@ -20,49 +20,9 @@ class Home extends Component {
 
   componentDidMount() {
     //Get rid of the magic number
-    let pageSize = Math.floor(window.screen.height / 150);
+    let pageSize = Math.floor(window.screen.height / 180);
 
     this.setState({ todos: getAllTasks(), filters, pageSize });
-  }
-
-  render() {
-    const {
-      todos,
-      filters,
-      pageSize,
-      currentPage,
-      selectedFilters
-    } = this.state;
-
-    return (
-      <React.Fragment>
-        <Sidebar className="position-fixed floating sidebar p-4 bg-light">
-          <Filters
-            filters={filters}
-            selectedFiltersLength={selectedFilters.length}
-            onSelectFilter={this.handleSelectFilter}
-            onClearAll={this.handleClearAll}
-          />
-        </Sidebar>
-        <main>
-          <Todos
-            todos={this.filterTodos(todos)}
-            pageSize={pageSize}
-            currentPage={currentPage}
-            onDeleteTodo={this.handleDeleteTodo}
-            onDoneTodo={this.handleDoneTodo}
-            selectedFilters={selectedFilters}
-          />
-        </main>
-        <Pagination
-          itemsCount={this.filterTodos().length}
-          pageSize={pageSize}
-          currentPage={currentPage}
-          onPageSelect={this.handlePageSelect}
-        />
-        <AddButton />
-      </React.Fragment>
-    );
   }
 
   filterTodos() {
@@ -74,7 +34,8 @@ class Home extends Component {
 
     for (let selectedFilter of selectedFilters) {
       for (let todo of todos) {
-        if (todo.priority === selectedFilter.value) processedTodos.push(todo);
+        if (parseInt(todo.priority) === selectedFilter.value)
+          processedTodos.push(todo);
       }
     }
 
@@ -151,6 +112,58 @@ class Home extends Component {
 
     this.setState({ todos });
   };
+
+  handleSearch = e => {
+    this.setState({ todos: getAllTasks(e.currentTarget.value) });
+  };
+
+  render() {
+    const {
+      todos,
+      filters,
+      pageSize,
+      currentPage,
+      selectedFilters
+    } = this.state;
+
+    return (
+      <React.Fragment>
+        <Sidebar className="position-fixed floating sidebar p-4 bg-light">
+          <Filters
+            filters={filters}
+            selectedFiltersLength={selectedFilters.length}
+            onSelectFilter={this.handleSelectFilter}
+            onClearAll={this.handleClearAll}
+          />
+        </Sidebar>
+        <main>
+          <div className="form-group m-2">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Search..."
+              onChange={this.handleSearch}
+            />
+          </div>
+          <Todos
+            todos={this.filterTodos(todos)}
+            pageSize={pageSize}
+            currentPage={currentPage}
+            onDeleteTodo={this.handleDeleteTodo}
+            onDoneTodo={this.handleDoneTodo}
+            selectedFilters={selectedFilters}
+          />
+        </main>
+        <Pagination
+          itemsCount={this.filterTodos().length}
+          pageSize={pageSize}
+          currentPage={currentPage}
+          onPageSelect={this.handlePageSelect}
+        />
+        <AddButton />
+      </React.Fragment>
+    );
+  }
 }
 
 export default Home;

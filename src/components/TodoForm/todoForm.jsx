@@ -65,7 +65,7 @@ class TodoDetails extends Form {
     return (
       <div className="form-container">
         <div className="col-8 card shadow p-4">
-          <h2>Edit task</h2>
+          <h2>Task Form</h2>
           <hr />
           <form>
             {this.renderBackButton("/")}
