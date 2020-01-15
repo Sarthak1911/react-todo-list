@@ -14,15 +14,15 @@ const todos = ({ todos, currentPage, pageSize, onDeleteTodo, onDoneTodo }) => {
         </h2>
       );
 
-    let sortedTodos = todos.sort(({ priority: p1 }, { priority: p2 }) => {
-      p1 = parseInt(p1);
-      p2 = parseInt(p2);
-      if (p1 < p2) return -1;
-      if (p1 > p2) return 1;
-      return 0;
-    });
+    //     let sortedTodos = todos.sort(({ priority: p1 }, { priority: p2 }) => {
+    //       p1 = parseInt(p1);
+    //       p2 = parseInt(p2);
+    //       if (p1 < p2) return -1;
+    //       if (p1 > p2) return 1;
+    //       return 0;
+    //     });
 
-    let paginatedTodos = paginate(sortedTodos, currentPage, pageSize);
+    let paginatedTodos = paginate(todos, currentPage, pageSize);
 
     return paginatedTodos.map(todo => (
       <Todo

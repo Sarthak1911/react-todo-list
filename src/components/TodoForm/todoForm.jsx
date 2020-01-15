@@ -1,12 +1,8 @@
 import React from "react";
 import Joi from "joi-browser";
+import axios from "axios";
 import Form from "../Form/form";
-import {
-  getTask,
-  getAllTasks,
-  updateTask,
-  createTask
-} from "../../services/fakeTodos";
+import { createTask, getTask, updateTask } from "../../services/tasks";
 class TodoDetails extends Form {
   state = {
     data: {},
@@ -16,21 +12,20 @@ class TodoDetails extends Form {
   constructor(props) {
     super(props);
     this.state.data = {
-      id: "",
-      createdBy: "",
+      createdBy: "Jon Doe",
       createdOn: "",
       priority: "",
-      isDone: "",
+      isDone: false,
       title: ""
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const { match, history } = this.props;
 
     if (match.params.id === "new") return;
 
-    const data = getTask(match.params.id);
+    const data = await getTask(match.params.id);
 
     if (data) this.setState({ data });
     else history.replace("/not-found");
@@ -48,20 +43,23 @@ class TodoDetails extends Form {
     isDone: Joi.optional()
   };
 
-  doSubmit = () => {
+  doSubmit = async () => {
+    const { id } = this.props.match.params;
+
     //Get task
     const task = { ...this.state.data };
     //Update task
-    if (task.id !== "") updateTask(task);
+    const oldTask = await getTask(id);
+    if (oldTask) await updateTask(id, task);
     //Create new task
-    else createTask(task);
+    else await createTask(task);
 
-    this.props.history.push("/");
+    this.props.history.push("/todos");
   };
 
-  render() {
-    const { id } = this.state.data;
+  showIsDone = () => this.props.match.params.id !== "new";
 
+  render() {
     return (
       <div className="form-container">
         <div className="col-8 card shadow p-4">
@@ -71,7 +69,7 @@ class TodoDetails extends Form {
             {this.renderBackButton("/")}
             {this.renderInput("title", "text")}
             {this.renderInput("priority", "number")}
-            {id ? this.renderCheckBox("isDone") : null}
+            {this.showIsDone() ? this.renderCheckBox("isDone") : null}
             {this.renderSubmitButton("Submit")}
           </form>
         </div>

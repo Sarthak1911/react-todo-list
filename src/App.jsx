@@ -21,7 +21,8 @@ class App extends Component {
           <Route path="/done" exact component={Done} />
           <Route path="/todos/:id" exact component={TodoForm} />
           <Route path="/not-found" exact component={NotFound} />
-          <Route path="/" exact component={Home} />
+          <Route path="/todos" exact component={Home} />
+          <Redirect exact from="/" to="/todos" />
           <Redirect to={"/not-found"} />
         </Switch>
       </div>

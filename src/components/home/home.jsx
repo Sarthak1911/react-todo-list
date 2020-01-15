@@ -1,10 +1,12 @@
 import React, { Component } from "react";
+import axios from "axios";
+import firebase from "../../services/firebase/config";
 import Todos from "../todos/todos";
 import Pagination from "../pagination/pagination";
 import Filters from "../filters/filters";
 import Sidebar from "../sidebar/sidebar";
 import AddButton from "../addButton/addButton";
-import { getAllTasks, deleteTask } from "../../services/fakeTodos";
+import { getAllTasks, deleteTask, updateTask } from "../../services/tasks";
 import { filters } from "../../services/fakeFilter";
 
 import "./home.css";
@@ -18,11 +20,11 @@ class Home extends Component {
     selectedFilters: []
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     //Get rid of the magic number
     let pageSize = Math.floor(window.screen.height / 180);
 
-    this.setState({ todos: getAllTasks(), filters, pageSize });
+    this.setState({ todos: await getAllTasks(), filters, pageSize });
   }
 
   filterTodos() {
@@ -43,20 +45,31 @@ class Home extends Component {
   }
 
   //Handle events
-  handleDeleteTodo = id => {
-    const { pageSize } = this.state;
+  handleDeleteTodo = async id => {
+    const {
+      pageSize,
+      todos: originalTodos,
+      currentPage: originalCurrentPage
+    } = this.state;
 
-    let { currentPage } = this.state;
+    let { currentPage, todos } = this.state;
 
-    deleteTask(id);
-
+    //Delete at client
     //Refresh the list
-    const todos = getAllTasks();
-
+    todos = todos.filter(todo => todo.id !== id);
     //Change page to previous if the one task on the page was deleted
     if (todos.length % pageSize === 0) --currentPage;
-
+    //Update the state if no errors
     this.setState({ todos: todos, currentPage });
+
+    try {
+      //Delete at server
+      await deleteTask(id);
+    } catch (error) {
+      alert("Something went wrong");
+      //If errors, revert
+      this.setState({ todos: originalTodos, currentPage: originalCurrentPage });
+    }
   };
 
   handlePageSelect = page => {
@@ -103,18 +116,36 @@ class Home extends Component {
     this.setState({ selectedFilters: [], currentPage: 1 });
   };
 
-  handleDoneTodo = id => {
+  handleDoneTodo = async id => {
     const { todos } = this.state;
 
-    const todoIndex = todos.findIndex(todo => todo.id === id);
+    const originalTodos = [...todos];
 
-    todos[todoIndex].isDone = !todos[todoIndex].isDone;
+    //Update the cilent
+    let taskId = todos.findIndex(todo => todo.id === id);
+
+    if (taskId < 0) return;
+
+    todos[taskId] = { ...todos[taskId], isDone: !todos[taskId].isDone };
+
+    console.log("new");
+    console.log(todos);
 
     this.setState({ todos });
+
+    try {
+      //Update the server
+      await updateTask(id, todos[taskId]);
+    } catch (error) {
+      alert("Something went wrong");
+      console.log("old");
+      console.log(originalTodos);
+      this.setState({ todos: originalTodos });
+    }
   };
 
-  handleSearch = e => {
-    this.setState({ todos: getAllTasks(e.currentTarget.value) });
+  handleSearch = async e => {
+    this.setState({ todos: await getAllTasks(e.currentTarget.value) });
   };
 
   render() {
