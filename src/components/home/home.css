@@ -25,3 +25,10 @@
 .floating-btn:hover {
   text-decoration: none;
 }
+
+.spinner-container {
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}

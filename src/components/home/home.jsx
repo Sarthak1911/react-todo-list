@@ -1,6 +1,4 @@
 import React, { Component } from "react";
-import axios from "axios";
-import firebase from "../../services/firebase/config";
 import Todos from "../todos/todos";
 import Pagination from "../pagination/pagination";
 import Filters from "../filters/filters";
@@ -10,6 +8,7 @@ import { getAllTasks, deleteTask, updateTask } from "../../services/tasks";
 import { filters } from "../../services/fakeFilter";
 
 import "./home.css";
+import Spinner from "./../Spinner/spinner";
 
 class Home extends Component {
   state = {
@@ -17,14 +16,20 @@ class Home extends Component {
     filters: [],
     pageSize: 0,
     currentPage: 1,
-    selectedFilters: []
+    selectedFilters: [],
+    showSpinner: true
   };
 
   async componentDidMount() {
     //Get rid of the magic number
     let pageSize = Math.floor(window.screen.height / 180);
 
-    this.setState({ todos: await getAllTasks(), filters, pageSize });
+    this.setState({
+      todos: await getAllTasks(),
+      filters,
+      pageSize,
+      showSpinner: false
+    });
   }
 
   filterTodos() {
@@ -46,6 +51,8 @@ class Home extends Component {
 
   //Handle events
   handleDeleteTodo = async id => {
+    this.setState({ showSpinner: true });
+
     const {
       pageSize,
       todos: originalTodos,
@@ -60,7 +67,7 @@ class Home extends Component {
     //Change page to previous if the one task on the page was deleted
     if (todos.length % pageSize === 0) --currentPage;
     //Update the state if no errors
-    this.setState({ todos: todos, currentPage });
+    this.setState({ todos: todos, currentPage, showSpinner: false });
 
     try {
       //Delete at server
@@ -68,7 +75,11 @@ class Home extends Component {
     } catch (error) {
       alert("Something went wrong");
       //If errors, revert
-      this.setState({ todos: originalTodos, currentPage: originalCurrentPage });
+      this.setState({
+        todos: originalTodos,
+        currentPage: originalCurrentPage,
+        showSpinner: false
+      });
     }
   };
 
@@ -77,6 +88,7 @@ class Home extends Component {
   };
 
   handleSelectFilter = (filter, e) => {
+    this.setState({ showSpinner: true });
     let { selectedFilters } = this.state;
 
     if (e.target.classList.contains("active"))
@@ -100,10 +112,11 @@ class Home extends Component {
       );
     }
 
-    this.setState({ selectedFilters, currentPage: 1 });
+    this.setState({ selectedFilters, currentPage: 1, showSpinner: false });
   };
 
   handleClearAll = e => {
+    this.setState({ showSpinner: true });
     //Reset the selectedFilters
     //Set currentPage to 1
     const filters = e.target.parentElement.childNodes;
@@ -113,10 +126,12 @@ class Home extends Component {
         filter.classList.remove("active");
     }
 
-    this.setState({ selectedFilters: [], currentPage: 1 });
+    this.setState({ selectedFilters: [], currentPage: 1, showSpinner: false });
   };
 
   handleDoneTodo = async id => {
+    this.setState({ showSpinner: true });
+
     const { todos } = this.state;
 
     const originalTodos = [...todos];
@@ -128,33 +143,33 @@ class Home extends Component {
 
     todos[taskId] = { ...todos[taskId], isDone: !todos[taskId].isDone };
 
-    console.log("new");
-    console.log(todos);
-
-    this.setState({ todos });
+    this.setState({ todos, showSpinner: false });
 
     try {
       //Update the server
       await updateTask(id, todos[taskId]);
     } catch (error) {
       alert("Something went wrong");
-      console.log("old");
-      console.log(originalTodos);
-      this.setState({ todos: originalTodos });
+      this.setState({ todos: originalTodos, showSpinner: false });
     }
   };
 
   handleSearch = async e => {
-    this.setState({ todos: await getAllTasks(e.currentTarget.value) });
+    this.setState({ showSpinner: true });
+    this.setState({
+      todos: await getAllTasks(e.currentTarget.value),
+      showSpinner: false
+    });
   };
 
-  render() {
+  showContent = () => {
     const {
       todos,
       filters,
       pageSize,
       currentPage,
-      selectedFilters
+      selectedFilters,
+      showSpinner
     } = this.state;
 
     return (
@@ -176,14 +191,18 @@ class Home extends Component {
               onChange={this.handleSearch}
             />
           </div>
-          <Todos
-            todos={this.filterTodos(todos)}
-            pageSize={pageSize}
-            currentPage={currentPage}
-            onDeleteTodo={this.handleDeleteTodo}
-            onDoneTodo={this.handleDoneTodo}
-            selectedFilters={selectedFilters}
-          />
+          {showSpinner ? (
+            <Spinner />
+          ) : (
+            <Todos
+              todos={this.filterTodos(todos)}
+              pageSize={pageSize}
+              currentPage={currentPage}
+              onDeleteTodo={this.handleDeleteTodo}
+              onDoneTodo={this.handleDoneTodo}
+              selectedFilters={selectedFilters}
+            />
+          )}
         </main>
         <Pagination
           itemsCount={this.filterTodos().length}
@@ -194,6 +213,10 @@ class Home extends Component {
         <AddButton />
       </React.Fragment>
     );
+  };
+
+  render() {
+    return this.showContent();
   }
 }
 

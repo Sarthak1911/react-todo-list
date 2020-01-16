@@ -1,6 +1,5 @@
 import React from "react";
 import Joi from "joi-browser";
-import axios from "axios";
 import Form from "../Form/form";
 import { createTask, getTask, updateTask } from "../../services/tasks";
 class TodoDetails extends Form {
@@ -45,14 +44,20 @@ class TodoDetails extends Form {
 
   doSubmit = async () => {
     const { id } = this.props.match.params;
-
-    //Get task
-    const task = { ...this.state.data };
-    //Update task
     const oldTask = await getTask(id);
-    if (oldTask) await updateTask(id, task);
-    //Create new task
-    else await createTask(task);
+    const { data: task } = { ...this.state };
+
+    try {
+      if (oldTask) await updateTask(id, task);
+      //Create new task
+      else await createTask(task);
+    } catch (ex) {
+      alert("Something went wrong");
+
+      if (oldTask) {
+        this.setState({ data: oldTask });
+      }
+    }
 
     this.props.history.push("/todos");
   };

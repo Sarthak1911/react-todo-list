@@ -34,7 +34,6 @@ export async function deleteTask(id) {
 export async function updateTask(id, task) {
   //Update the task
   await axios.put(`${url}/${id}.json`, task);
-  throw new Error("");
 }
 
 export async function createTask(task) {
