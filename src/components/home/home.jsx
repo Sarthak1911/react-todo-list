@@ -4,11 +4,11 @@ import Pagination from "../pagination/pagination";
 import Filters from "../filters/filters";
 import Sidebar from "../sidebar/sidebar";
 import AddButton from "../addButton/addButton";
+import Spinner from "./../Spinner/spinner";
 import { getAllTasks, deleteTask, updateTask } from "../../services/tasks";
 import { filters } from "../../services/fakeFilter";
 
 import "./home.css";
-import Spinner from "./../Spinner/spinner";
 
 class Home extends Component {
   state = {
@@ -174,7 +174,7 @@ class Home extends Component {
 
     return (
       <React.Fragment>
-        <Sidebar className="position-fixed floating sidebar p-4 bg-light">
+        <Sidebar>
           <Filters
             filters={filters}
             selectedFiltersLength={selectedFilters.length}
@@ -184,6 +184,7 @@ class Home extends Component {
         </Sidebar>
         <main>
           <div className="form-group m-2">
+            <AddButton />
             <input
               type="text"
               className="form-control"

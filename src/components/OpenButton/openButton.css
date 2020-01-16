@@ -1,0 +1,12 @@
+.floating-btn-open {
+  position: fixed;
+  width: 60px;
+  height: 60px;
+  bottom: 80px;
+  right: 0;
+  border-radius: 50%;
+}
+
+.floating-btn-open:hover {
+  text-decoration: none;
+}

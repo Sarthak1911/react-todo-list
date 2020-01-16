@@ -1,0 +1,47 @@
+.floating {
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+.mobile-toggle-btn {
+  display: none;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  z-index: 100; /* Behind the navbar */
+  width: 15%;
+}
+
+.sidebar-open {
+  left: 0;
+  transition: ease 0.4s left;
+}
+
+.sidebar-close {
+  left: -15%;
+  transition: ease 0.4s left;
+}
+
+@media only screen and (max-width: 600px) {
+  .sidebar {
+    width: 100%;
+  }
+
+  .mobile-toggle-btn {
+    display: block;
+  }
+
+  .sidebar-open {
+    left: 0;
+    transition: ease 0.4s left;
+  }
+
+  .sidebar-close {
+    left: -100%;
+    transition: ease 0.4s left;
+  }
+}
