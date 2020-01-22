@@ -28,24 +28,24 @@ const todo = ({ todo, onDeleteTodo, onDoneTodo }) => {
       }
     >
       <div className="card-body d-flex justify-content-between align-items-center">
-        <div className="d-flex">
+        <div className="d-flex align-items-end">
           {!isDone ? (
-            <button className="btn btn-link m-1">
+            <button className="btn btn-link m-0 pt-0 pb-0">
               <i
                 className="fa fa-lg fa-square-o text-dark"
                 onClick={() => onDoneTodo(id)}
               ></i>
             </button>
           ) : (
-            <button className="btn btn-link m-1">
+            <button className="btn btn-link m-0 pt-0 pb-0">
               <i className="fa fa-lg fa-check text-dark"></i>
             </button>
           )}
-          <h2 className={isDone ? "line-through" : ""}>
+          <span className={isDone ? "line-through" : ""}>
             <Link className="a-link text-dark" to={"/todos/" + id}>
               {title}
             </Link>
-          </h2>
+          </span>
         </div>
         <button className="btn btn-danger m-1" onClick={() => onDeleteTodo(id)}>
           Delete

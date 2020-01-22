@@ -5,8 +5,16 @@
   bottom: 0;
   right: 0;
   border-radius: 50%;
+  z-index: 99;
+  margin: 50px;
 }
 
 .floating-btn:hover {
   text-decoration: none;
+}
+
+@media only screen and (max-width: 600px) {
+  .floating-btn {
+    margin: 20px;
+  }
 }

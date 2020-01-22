@@ -5,8 +5,16 @@
   bottom: 80px;
   right: 0;
   border-radius: 50%;
+  margin: 50px;
+  z-index: 99;
 }
 
 .floating-btn-open:hover {
   text-decoration: none;
+}
+
+@media only screen and (max-width: 600px) {
+  .floating-btn-open {
+    margin: 20px;
+  }
 }

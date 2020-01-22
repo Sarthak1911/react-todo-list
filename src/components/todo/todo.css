@@ -5,8 +5,15 @@
 .a-link {
   padding: 0;
   margin: 0;
+  font-size: x-large;
 }
 
 .a-link:hover {
   text-decoration: none;
+}
+
+@media only screen and (max-width: 600px) {
+  .a-link {
+    font-size: larger;
+  }
 }

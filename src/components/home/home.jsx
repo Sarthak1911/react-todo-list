@@ -22,7 +22,7 @@ class Home extends Component {
 
   async componentDidMount() {
     //Get rid of the magic number
-    let pageSize = Math.floor(window.screen.height / 180);
+    let pageSize = Math.ceil(window.screen.height / 180);
 
     this.setState({
       todos: await getAllTasks(),
@@ -182,15 +182,20 @@ class Home extends Component {
             onClearAll={this.handleClearAll}
           />
         </Sidebar>
+        <nav
+          className="d-flex bg-white justify-content-center navbar navbar-light fixed-top pt-3"
+          style={{ zIndex: "99" }}
+        >
+          <input
+            type="text"
+            className="form-control col-lg-7 col-md-8 col-sm-10 shadow"
+            placeholder="Search..."
+            onChange={this.handleSearch}
+          />
+        </nav>
         <main>
-          <div className="form-group m-2">
+          <div className="d-flex justify-content-center form-group m-2">
             <AddButton />
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Search..."
-              onChange={this.handleSearch}
-            />
           </div>
           {showSpinner ? (
             <Spinner />
